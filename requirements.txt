@@ -1,0 +1,6 @@
+Flask==3.0.0
+Werkzeug==3.0.1
+mysql-connector-python==8.0.33
+plotly==5.18.0
+gunicorn==21.2.0
+

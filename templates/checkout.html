@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Visitor Check-Out</title>
+        <style>
+            body { font-family: Arial, sans-serif; background: #f5f5f5; }
+            .container { width: 50%; margin: 80px auto; padding: 30px; background: white; border-radius: 8px; }
+            h2 { text-align: center; }
+            button { width: 100%; padding: 10px; background: #0077cc; color: white; border: none; border-radius: 5px; cursor: pointer; }
+            button:hover { background: #005fa3; }
+            select, input { width: 100%; padding: 10px; margin-bottom: 15px; }
+            a { display: block; text-align: center; margin-top: 15px; color: #0077cc; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Visitor Check-Out</h2>
+
+        <form action="/checkout" method="POST">
+            <label><strong>Select Visitor:</strong></label>
+            <select name="visit_id" required>
+                {% for v in visitors %}
+                    <option value="{{ v.visit_id }}">{{ v.visitor_name }} - {{ v.purpose }} ({{ v.checkin_time }})</option>
+                    {% endfor %}
+            </select>
+            
+            <button type="submit">Check Out</button>
+         </form>
+        
+         <a href="/checkin">Back to Check-In</a>
+         
+        </div>   
+    </body>
+</html>

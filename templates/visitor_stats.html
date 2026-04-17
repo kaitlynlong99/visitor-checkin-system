@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Visitor Analytics</title>
+        <style>
+            body {
+                background-color: #f9f9f9; 
+                padding: 20px;
+                font-family: Arial, sans-serif;
+            }
+
+            h2 {
+                margin-bottom: 20px;
+                color: #333;
+            }
+
+            .toggle-btn {
+                padding: 10px 18px;
+                border-radius: 5px;
+                border: none;
+                cursor: pointer;
+                font-weight: bold;
+                margin: 5px;
+                min-width: 130px;
+                background-color: #e3e3e3;
+            }
+
+            .dept-selected {
+                background-color: #0a66c2;
+                color: white;
+            }
+
+            .purpose-selected {
+                background-color: #28a745;
+                color: white;
+            }
+            
+            .csv-btn, .back-btn {
+                display: inline-block;
+                background-color: #28a745;
+                color: white;
+                padding: 10px 18px;
+                border-radius: 5px;
+                font-weight: bold;
+                text-decoration: none;
+                margin-bottom: 15px;
+            }
+
+            .back-btn { background-color: #0a66c2;}
+            .back-btn:hover { background-color: #084a8c; }
+
+            .csv-btn:hover { background-color: #1e7e34; }
+            
+            .chart-container {
+                margin-top: 30px;
+                width: 100%;
+                max-width: 900px;
+                margin-left: auto;
+                margin-right: auto;
+                display: flex;
+                justify-content: center;
+            }
+
+            #deptChart, #purposeChart {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        </style>
+
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+
+    <body>
+
+        <a href="/admin" class="back-btn">Back to Dashboard</a>
+
+        <h2>Visitor Analytics</h2>
+
+        <button id="deptBtn" class="toggle-btn dept-selected" onclick="showDept()">By Department</button>
+        <button id="purposeBtn" class="toggle-btn" onclick="showPurpose()">By Purpose</button>
+
+            <div class="chart-container">
+                <div id="deptChart" style="width: 100%; height: 450px;"></div>
+                <div id="purposeChart" style="width: 100%; height: 450px; display: none;"></div>
+            </div>
+
+            <a href="/export-visits-csv" class="csv-btn">Download CSV</a>
+            
+            <script>
+                function showDept() {
+                    document.getElementById("deptChart").style.display = "block";
+                    document.getElementById("purposeChart").style.display = "none";
+                    document.getElementById("deptBtn").classList.add("dept-selected");
+                    document.getElementById("purposeBtn").classList.remove("purpose-selected");
+                }
+
+
+              function showPurpose() {
+                document.getElementById("deptChart").style.display = "none";
+                document.getElementById("purposeChart").style.display = "block";
+                document.getElementById("purposeBtn").classList.add("purpose-selected");
+                document.getElementById("deptBtn").classList.remove("dept-selected");
+              }
+
+              const deptLabels = {{ dept_data | map(attribute='department') | list | safe }};
+              const deptValues = {{ dept_data | map(attribute='total') | list | safe }};
+
+              const purposeLabels = {{ purpose_data | map(attribute='purpose') | list | safe }};
+              const purposeValues = {{ purpose_data | map(attribute='total') | list | safe }};
+
+              const deptColors = [
+                '#4e79a7', '#f28e2b', '#e15759', '#76b7b2',
+                '#59a14f', '#edc948', '#b07aa1', '#ff9da7'
+              ];
+
+              const purposeColors = [
+                '#4e79a7', '#f28e2b', '#e15759', '#76b7b2',
+                '#59a14f', '#edc948', '#b07aa1', '#ff9da7',
+                '#9c755f', '#bab0ab', '#8cd17d', '#b6992d'
+              ];
+
+                Plotly.newPlot('deptChart', [{
+                   x: deptLabels,
+                   y: deptValues,
+                    type: 'bar',
+                    marker: {
+                        color: deptColors.slice(0, deptLabels.length)
+                    }
+                }], {
+                    title: "Visits by Department",
+                    margin: { t: 60, l: 60, r: 60, b: 60 }
+                });
+
+                Plotly.newPlot('purposeChart', [{
+                    values: purposeValues,
+                    labels: purposeLabels,
+                    type: 'pie',
+                    marker: {
+                        colors: purposeColors.slice(0, purposeLabels.length)
+                    }
+                }], {
+                    title: "Visits by Purpose" });
+            </script>
+    </body>
+</html>

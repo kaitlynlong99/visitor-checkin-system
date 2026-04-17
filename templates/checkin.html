@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Visitor Check-In</title>
+        <style>
+            body { 
+                font-family: Arial; 
+                margin: 50px;
+            }
+            form { 
+                max-width: 400px;
+                margin: auto; 
+            }
+            label { 
+                display: block; 
+                margin-top: 15px; 
+                font-weight: 600;
+            }
+            
+            input[type="text"], select, button {
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                font-size: 14px;
+            }
+
+            input[type="text"] {
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            select {
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            button { 
+              padding: 10px;
+              background-color: #007bff;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-weight: bold;
+              margin-top: 12px;
+            }
+            button:hover {
+                background-color: #0056b3;
+            }
+
+            .back-btn {
+                background-color: #333;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-weight: bold;
+            }
+            .back-btn:hover {
+                background-color: #111;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div style="position: absolute; top: 20px; left: 20px;">
+            <a href="/admin" style="text-decoration: none;">
+                <button class="back-btn">Go to Admin Dashboard</button>
+            </a>
+        </div>
+
+        <h2 style="text-align: center;">Visitor Check-In</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div style="color: {{ 'red' if category == 'error' else 'green' }}; margin-top: 10px;">
+                        {{ msg }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+
+            <label>Visitor Name: </label>
+            <input type="text" name="visitor_name" required>
+
+            <label>Purpose of Visit:</label>
+            <select name="purpose" required>
+                <option value="Campus Tour">Campus Tour</option>
+                <option value="Prospective Student Meeting">Prospective Student Meeting</option>
+                <option value="Job Interview">Job Interview</option>
+                <option value="Faculty/Staff Meeting">Faculty/Staff Meeting</option>
+                <option value="Financial Aid Inquiry">Financial Aid Inquiry</option>
+                <option value="Records or Registration Help">Records or Registration Help</option>
+                <option value="Tech Support">Tech Support</option>
+                <option value="Housing or Student Services">Housing or Student Services</option>
+                <option value="Library Visit">Library Visit</option>
+                <option value="Athletic Visit or Recruit">Athletic Visit or Recruit</option>
+                <option value="Other">Other</option>
+            </select>
+
+
+            <label>Person You Are Visiting:</label>
+            <input type="text" name="visiting_person" required>
+
+            <label>Department</label>
+            <select name="department" required>
+                <option value="Admissions">Admissions</option>
+                <option value="HR">HR</option>
+                <option value="IT">IT</option>
+                <option value="Finance">Finance</option>
+                <option value="Athletics">Athletics</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Nursing">Nursing</option>
+                <option value="Financial Aid">Financial Aid</option>
+                <option value="Registrar">Registrar</option>
+                <option value="Student Affairs">Student Affairs</option>
+                <option value="Library">Library</option>
+                <option value="Career Services">Career Services</option>
+                <option value="Housing">Housing</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <button type="submit">Check In</button>
+        </form>
+
+
+    </body>
+</html>

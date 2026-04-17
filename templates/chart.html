@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Department Chart</title>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+    <body>
+
+        <h2 style="font-family: Arial">Visits by Department</h2>
+
+        <div id="chart" style="width: 60%; margin: auto;"></div>
+
+        <script>
+            var plots = {{ chart_html | safe }};
+            Plotly.newPlot('chart', plots);
+        </script>
+
+        <br>
+        <a href="/admin"><button>Back to Admin Dashboard</button></a>
+        
+    </body>
+</html>

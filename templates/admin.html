@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Admin Dashboard - Visitor Log</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 25px; }
+            table { border-collapse: collapse; width: 100%;  margin-top: 20px; }
+            th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            h2 {color: #333; }
+            input[type="text"] { padding: 8px; width: 250px; }
+            button, input[type="submit"] { padding: 6px 12px; cursor: pointer; }
+            .checkout-btn {background-color: rgb(194, 54, 22); color: white; border: none; }
+            .checkout-btn:hover { background-color: rgb(150, 43, 15); }
+
+            .dashboard-btn {
+                background-color: #0073e6;
+                color: white;
+                padding: 6px 12px;
+                border-radius: 4px;
+                text-decoration: none;
+                display: inline-block;
+                border: none;
+                cursor: pointer;
+                font-weight: bold;
+                width: 155px;
+                text-align: center;
+                margin-right: 8x;
+                font-size: 14px;
+            }
+
+            .dashboard-btn.logout {
+                background-color: #444;
+            }
+
+            .dashboard-btn.chart {
+                background-color: #4CAF50;
+            }
+
+            .dashboard-bth:hover {
+                opacity: 0.9;
+            }
+
+            .status-box {
+                background-color: #f7faff;
+                border: 1px solid #cfe2ff;
+                padding: 10px 20px;
+                border-radius: 6px;
+                display: inline-block;
+                margin: 0 auto;
+                color: #003366;
+                font-weight: bold;
+            }
+
+            table {
+                border-collapse: separate;
+                border-spacing: 0;
+                border-radius: 6px;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <h2 style="text-align: center;">Admin Visitor Dashboard</h2>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px">
+
+            <div>
+                <a href="/logout" class="dashboard-btn logout">Logout</a>
+                <a href="/checkin" class="dashboard-btn">Back to Check-In</a>
+                <a href="/analytics" class="dashboard-btn chart">View Charts</a>
+            </div>
+
+            <div style="font-size: 18px; font-weight: 600; color: #003366;">
+                Visitors Checked In Today: <strong>{{ today_count }}</strong>
+            </div>
+
+            </div>
+    
+        <form method="GET" action="/admin" style="margin-top: 10px;">
+            <input type="text" name="search" value="{{ request.args.get('search', '') }}" placeholder="Search by Visitor Name">
+            <button type="submit" class="dashboard-btn" style="width: 120px;">Search</button>
+        </form>
+
+        <div style="margin-top: 10px;"></div>
+
+        <table>
+            <tr>
+                <th>Visitor Name</th>
+                <th>Purpose</th>
+                <th>Visiting</th>
+                <th>Department</th>
+                <th>Check-In Time</th>
+                <th>Check-Out Time</th>
+                <th>Action</th>
+            </tr>
+
+            {% for v in visitors %}
+            <tr>
+                <td>{{ v.visitor_name }}</td>
+                <td>{{ v.purpose }}</td>
+                <td>{{ v.visiting_person }}</td>
+                <td>{{ v.department }}</td>
+                <td>{{ v.checkin_time}}</td>
+                <td>{{ v.checkout_time if v.checkout_time else "Not Checked Out" }}</td>
+                <td>
+                    {% if not v.checkout_time %}
+                        <form method="POST" action="/checkout">
+                            <input type="hidden" name="visitor_id" value="{{ v.visit_id }}">
+                            <input type="submit" class="checkout-btn" value="Check Out">
+                        </form>
+                    {% else %}
+                        Completed
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </body>
+</html>
